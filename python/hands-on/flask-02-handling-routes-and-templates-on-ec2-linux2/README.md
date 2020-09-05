@@ -134,3 +134,9 @@ The server responds to that request with an HTTP response message. Within the re
 
 - Connect the route handling and templating web application from the terminal with `curl` command.
 
+ec2 üzerinden :
+sudo yum update -y && sudo yum install python3 -y && sudo python3 --version && sudo pip3 install flask
+
+sudo python3 app.py
+
+
