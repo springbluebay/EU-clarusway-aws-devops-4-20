@@ -63,7 +63,7 @@ Keep it as is
 
 
 Amazon Linux 2 AMI (HVM), SSD Volume Type
-ami-02354e95b39ca8dec
+
 
 10. Instance Type
 
@@ -139,7 +139,7 @@ Keep it as is
 25. Template version description
 
 
-V1 nginx
+V2 nginx
 
 
 26. Key pair
@@ -210,7 +210,7 @@ Select your .pem file name
 
 
 Key             : Name
-Value           : Webserver-V3
+Value           : V3 nginx
 Resource type   : Instance
 
 

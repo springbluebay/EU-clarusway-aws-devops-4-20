@@ -1,0 +1,55 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Kittens Carousel is a static website application deployed with Apache Web Server on AWS Elastic Compute Cloud (EC2) Instance using AWS Cloudformation Service. 
+
+Resources:
+  MyKittensSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: Allows SSH and HTPP access to users #required
+      GroupName: MyWbServerGroup
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: KittensSecGrup
+      VpcId: vpc-6b646011
+  MyKittensEC2:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: ami-0c94855ba95c71c99 #
+      InstanceInitiatedShutdownBehavior: Stop #
+      InstanceType: t2.micro #
+      KeyName: blueman
+      SecurityGroupIds:
+        - !Ref MyKittensSecurityGroup
+      SubnetId: subnet-8017e2df
+      Tags:
+        - Key: Name
+          Value: !Sub Web Server of ${AWS::Stackname} Stack
+      UserData:
+      #!/bin/bash
+      yum update -y
+      yum install httpd -y
+      cd /var/www/html
+      rm index.html
+      wget https://raw.githubusercontent.com/springbluebay/EU-clarusway-aws-devops-4-20/master/aws/projects/101-kittens-carousel-static-website-ec2/static-web/index.html
+      wget https://raw.githubusercontent.com/springbluebay/EU-clarusway-aws-devops-4-20/master/aws/projects/101-kittens-carousel-static-website-ec2/static-web/cat0.jpeg
+      wget https://raw.githubusercontent.com/springbluebay/EU-clarusway-aws-devops-4-20/master/aws/projects/101-kittens-carousel-static-website-ec2/static-web/cat1.jpeg
+      wget https://raw.githubusercontent.com/springbluebay/EU-clarusway-aws-devops-4-20/master/aws/projects/101-kittens-carousel-static-website-ec2/static-web/cat2.jpeg
+      systemctl start httpd
+      systemctl enable httpd
+
+  
+Outputs:
+  WebsiteURL:
+    Value: !Sub
+      - http://${PublicAddress}
+      - PublicAddress: !GetAtt MyKittensEC2.PublicDnsName
+    Description: Kitten Carousel Application URL
