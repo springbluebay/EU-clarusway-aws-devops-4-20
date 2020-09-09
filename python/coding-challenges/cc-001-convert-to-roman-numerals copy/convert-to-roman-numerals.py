@@ -7,9 +7,9 @@ def convert(decimal_num):
     # initialize the result variable
     num_to_roman = ''
     # loop the roman numerals, calculate for each symbol and add to the result
-    for i in roman.keys():
-        num_to_roman += roman[i] * (decimal_num // i)
-        decimal_num %= i
+    for i in roman.keys():  
+        num_to_roman += roman[i] * (decimal_num // i)  # MMM + D + CCC
+        decimal_num %= i # 300
     return num_to_roman
 
 # flag to show warning to the user, default is False.
