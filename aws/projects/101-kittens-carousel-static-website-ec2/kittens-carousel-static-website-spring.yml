@@ -1,5 +1,11 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: Kittens Carousel is a static website application deployed with Apache Web Server on AWS Elastic Compute Cloud (EC2) Instance using AWS Cloudformation Service. 
+Description: Kittens Carousel is a static website application deployed with Apache Web Server on AWS Elastic Compute Cloud (EC2) Instance using AWS Cloudformation Service.
+
+Parameters:
+  KeyPairNew:
+    Description: hi juliets
+    Type: AWS::EC2::KeyPair::KeyName
+    Default: test
 
 Resources:
   MyKittensSecurityGroup:
@@ -23,30 +29,29 @@ Resources:
   MyKittensEC2:
     Type: "AWS::EC2::Instance"
     Properties:
-      ImageId: ami-0c94855ba95c71c99 #
-      InstanceInitiatedShutdownBehavior: Stop #
-      InstanceType: t2.micro #
-      KeyName: blueman
+      ImageId: ami-0c94855ba95c71c99
+      InstanceType: t2.micro
+      KeyName: !Ref KeyPairNew
       SecurityGroupIds:
         - !Ref MyKittensSecurityGroup
       SubnetId: subnet-8017e2df
       Tags:
         - Key: Name
-          Value: !Sub Web Server of ${AWS::Stackname} Stack
+          Value: !Sub Web Server of ${AWS::StackName} Stack
       UserData:
-      #!/bin/bash
-      yum update -y
-      yum install httpd -y
-      cd /var/www/html
-      rm index.html
-      wget https://raw.githubusercontent.com/springbluebay/EU-clarusway-aws-devops-4-20/master/aws/projects/101-kittens-carousel-static-website-ec2/static-web/index.html
-      wget https://raw.githubusercontent.com/springbluebay/EU-clarusway-aws-devops-4-20/master/aws/projects/101-kittens-carousel-static-website-ec2/static-web/cat0.jpeg
-      wget https://raw.githubusercontent.com/springbluebay/EU-clarusway-aws-devops-4-20/master/aws/projects/101-kittens-carousel-static-website-ec2/static-web/cat1.jpeg
-      wget https://raw.githubusercontent.com/springbluebay/EU-clarusway-aws-devops-4-20/master/aws/projects/101-kittens-carousel-static-website-ec2/static-web/cat2.jpeg
-      systemctl start httpd
-      systemctl enable httpd
-
-  
+        Fn::Base64: 
+          !Sub |
+            #!/bin/bash
+            yum update -y
+            yum install httpd -y
+            chmod -R 777 /var/www/html
+            cd /var/www/html
+            wget https://raw.githubusercontent.com/springbluebay/EU-clarusway-aws-devops-4-20/master/aws/projects/101-kittens-carousel-static-website-ec2/static-web/index.html
+            wget https://raw.githubusercontent.com/springbluebay/EU-clarusway-aws-devops-4-20/master/aws/projects/101-kittens-carousel-static-website-ec2/static-web/cat0.jpg
+            wget https://raw.githubusercontent.com/springbluebay/EU-clarusway-aws-devops-4-20/master/aws/projects/101-kittens-carousel-static-website-ec2/static-web/cat1.jpg
+            wget https://raw.githubusercontent.com/springbluebay/EU-clarusway-aws-devops-4-20/master/aws/projects/101-kittens-carousel-static-website-ec2/static-web/cat2.jpg
+            systemctl start httpd
+            systemctl enable httpd
 Outputs:
   WebsiteURL:
     Value: !Sub

@@ -1,0 +1,54 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Resources:
+  FdnCfiInstance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      
+      ImageId: "ami-0c94855ba95c71c99"
+      
+      InstanceType: "t2.micro"
+      
+      KeyName: "windowsKey"
+
+      SecurityGroups:
+        - !Ref ServerSecurityGroup
+      
+      
+      Tags:
+        - Key : Name
+          Value : juliet7
+          
+      
+      UserData:
+        Fn::Base64:
+          !Sub |           
+            
+
+            #!/bin/bash -xe
+            yum update -y
+            yum install -y httpd.x86_64
+            systemctl start httpd.service
+            systemctl enable httpd.service
+            #usermod -a -G apache ec2-user
+            #chown us-R ec2-user:apache /var/www
+            chmod -R 777 /var/www/html
+            cd /var/www/html/
+            wget https://github.com/nicholaswyn20/aws-myCV-Repo/raw/master/aws/projects/101-kittens-carousel-static-website-ec2/static-web/repo.zip 
+            unzip repo.zip
+            rm -r repo.zip
+            systemctl restart httpd
+
+  ServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http to client host
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 0.0.0.0/0     
