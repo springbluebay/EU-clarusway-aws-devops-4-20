@@ -1,0 +1,43 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: This template creates an EC2 instance to run a static website (kittens) application deployed with Apache Web Server
+
+Resources:
+  necmiInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0c94855ba95c71c99
+      InstanceType: t2.micro
+      KeyName: dersss
+      SecurityGroups:
+        - ssh-http
+      Tags:
+        - Key: Name
+          Value: necmi-kitten
+      UserData: 
+        Fn::Base64:
+          !Sub |
+            #! /bin/bash
+            sudo yum update -y
+            sudo yum install python3 -y
+            sudo yum install httpd -y
+            sudo systemctl start httpd
+            sudo systemctl status httpd
+            sudo systemctl enable httpd
+            sudo chmod -R 777 /var/www/html
+            cd /var/www/html
+
+            wget https://raw.githubusercontent.com/johnstevensmith/aws-devops-johnsteven/master/aws/projects/101-kittens-carousel-static-website-ec2/README.md
+            wget https://raw.githubusercontent.com/johnstevensmith/aws-devops-johnsteven/master/aws/projects/101-kittens-carousel-static-website-ec2/static-web/index%20-%20Copy.html
+            wget https://raw.githubusercontent.com/johnstevensmith/aws-devops-johnsteven/master/aws/projects/101-kittens-carousel-static-website-ec2/static-web/cat0.jpg
+            wget https://raw.githubusercontent.com/johnstevensmith/aws-devops-johnsteven/master/aws/projects/101-kittens-carousel-static-website-ec2/static-web/cat1.jpg
+            wget https://raw.githubusercontent.com/johnstevensmith/aws-devops-johnsteven/master/aws/projects/101-kittens-carousel-static-website-ec2/static-web/cat2.jpg
+            
+            sudo systemctl restart httpd
+            systemctl enable httpd
+
+
+
+
+
+        

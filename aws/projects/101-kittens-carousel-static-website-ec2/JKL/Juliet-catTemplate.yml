@@ -1,6 +1,19 @@
 AWSTemplateFormatVersion: 2010-09-09
 
 Resources:
+  ServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http to client host
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 0.0.0.0/0
   FdnCfiInstance:
     Type: "AWS::EC2::Instance"
     Properties:
@@ -14,16 +27,13 @@ Resources:
       SecurityGroups:
         - !Ref ServerSecurityGroup
       
-      
       Tags:
         - Key : Name
           Value : juliet7
           
-      
       UserData:
         Fn::Base64:
           !Sub |           
-            
 
             #!/bin/bash -xe
             yum update -y
@@ -38,17 +48,3 @@ Resources:
             unzip repo.zip
             rm -r repo.zip
             systemctl restart httpd
-
-  ServerSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Allow http to client host
-      SecurityGroupIngress:
-      - IpProtocol: tcp
-        FromPort: 80
-        ToPort: 80
-        CidrIp: 0.0.0.0/0
-      - IpProtocol: tcp
-        FromPort: 22
-        ToPort: 22
-        CidrIp: 0.0.0.0/0     
