@@ -2,6 +2,7 @@
 from flask import Flask, url_for, render_template, request
 # Create an object named app
 app = Flask(__name__)
+
 # Create a function named `home` which uses template file named `index.html` given under `templates` folder,
 # send your name as template variable, and assign route of no path ('/')
 @app.route("/")
