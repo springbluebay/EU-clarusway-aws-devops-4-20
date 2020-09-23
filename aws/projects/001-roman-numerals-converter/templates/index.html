@@ -66,14 +66,14 @@
 
   <form action="/" method="post">
     <label for="number"><b>Please enter a number:</b></label>
-    <input placeholder="50" name="number" id="number" required />
+    <input placeholder="50" name="input" id="number" required />
     <button type="submit">Submit</button>
     {% if not_valid %}
     <p class="warning"><b>Not Valid! Please enter a number between 1 and 3999, inclusively.</b></p>
     {% endif %}
   </form>
 
-  <p class="footnote"><i>This app is developed in Python by <b>{{ Spring }}</b> and deployed with Flask on AWS EC2 Instance using AWS Clouldformation Service.</i></p>
+  <p class="footnote"><i>This app is developed in Python by <b>{{ developer_name }}</b> and deployed with Flask on AWS EC2 Instance using AWS Clouldformation Service.</i></p>
 </body>
 
 </html>
