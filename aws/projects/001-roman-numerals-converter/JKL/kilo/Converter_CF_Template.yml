@@ -1,0 +1,72 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: The Roman Numerals Converter Application aims to convert the given number to the Roman numerals. 
+ The application coded in Python and deployed as a web application with Flask on AWS Elastic Compute 
+ Cloud (EC2) Instance using AWS Cloudformation Service. The application stack; is created with new AWS resources, 
+ takes the name of the Key Pair as a parameter from the user, runs on Amazon Linux 2 EC2 Instance. EC2 Instance type 
+ is configured as `t2.micro`. Instance launched by Cloudformation should be tagged `Web Server of StackName` 
+ The Web Application is accessible via web browser and terminal from anywhere. The Application files are downloaded 
+ from Github repo and deployed on EC2 Instance using user data script within cloudformation template. Roman Numerals 
+ Converter Application Website URL is given as output by Cloudformation Service, after the stack created.
+
+Parameters:
+  ConverterKey:         #Key seçimi yaptırmak için
+    Description: Key files parameters
+    Type: "AWS::EC2::KeyPair::KeyName"
+
+Resources:
+ ConverterSecGr:
+  Type: "AWS::EC2::SecurityGroup"
+  Properties:
+    GroupDescription: Allows SSH and HTTP #required
+    GroupName: Coverter_Sec_Group
+    SecurityGroupIngress:
+    - IpProtocol: tcp
+      FromPort: "80"
+      ToPort: "80"
+      CidrIp: 0.0.0.0/0
+    - IpProtocol: tcp
+      FromPort: "22"
+      ToPort: "22"
+      CidrIp: 0.0.0.0/0        
+ WebServerInstance:
+  Type: "AWS::EC2::Instance"
+  Properties:
+    ImageId: ami-0c94855ba95c71c99
+    InstanceType: t2.micro
+    KeyName: !Ref ConverterKey
+    SecurityGroupIds:
+      - !Ref ConverterSecGr
+    Tags:
+     - Key: "Name"
+       Value: !Join [ " ", ["Web Server of", !Ref "AWS::StackName" ] ]
+    UserData:
+        'Fn::Base64': 
+          !Sub |
+           #!/bin/bash
+           
+           yum update -y
+
+           yum install python3 -y
+
+           pip3 install flask
+
+           #getting index.html, result.html, converter_app.py
+           
+           mkdir templates
+           cd templates 
+
+           wget https://raw.githubusercontent.com/fianchettogianni/clarusway-aws-devops-workshop/master/aws/projects/001-roman-numerals-converter/templates/index.html
+           wget https://raw.githubusercontent.com/fianchettogianni/clarusway-aws-devops-workshop/master/aws/projects/001-roman-numerals-converter/templates/result.html
+           
+           cd ..
+           wget https://raw.githubusercontent.com/fianchettogianni/clarusway-aws-devops-workshop/master/aws/projects/001-roman-numerals-converter/converter_app.py
+           python3 Group_Kilo_Roman.py
+
+Outputs:
+  WebSiteURL:
+    Description: URL for application
+    Value: !Join [ "://", [ "http", !GetAtt WebServerInstance.PublicDnsName ] ]
+
+
+    

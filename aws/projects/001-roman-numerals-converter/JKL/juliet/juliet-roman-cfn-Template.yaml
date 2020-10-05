@@ -1,0 +1,51 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: This template creates an EC2 instance which enables SSH connection. Aim of this template converting roman numerals to numbers.
+Resources: 
+  FatihCFInstance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: "ami-0c94855ba95c71c99"
+      InstanceType: "t2.micro"
+      KeyName: aws_linux
+      SecurityGroups:
+        - !Ref ServerSecurityGroup
+
+      Tags:
+        - Key: Name
+          Value: Fatih
+      UserData: 
+        Fn::Base64: 
+          !Sub |
+
+           #!/bin/bash -xe
+           yum update -y 
+           yum install python3 -y
+           pip3 install flask 
+           mkdir templates 
+           cd templates
+           wget https://raw.githubusercontent.com/fatihseydi/clarusway-aws-devops-workshop/master/aws/projects/001-roman-numerals-converter/templates/index.html
+           wget https://raw.githubusercontent.com/fatihseydi/clarusway-aws-devops-workshop/master/aws/projects/001-roman-numerals-converter/templates/result.html
+           cd ..
+           wget https://raw.githubusercontent.com/fatihseydi/clarusway-aws-devops-workshop/master/aws/projects/001-roman-numerals-converter/juliet_app.py      
+           python3 juliet_app.py
+  ServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http to client host
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 0.0.0.0/0      
+Outputs:
+  WebsiteURL:
+    Value: !Sub
+      - http://${Converter}
+      - Converter: !GetAtt FatihCFInstance.PublicDnsName
+    Description: Decimal to Roman Number Converter Application URL             
+    
