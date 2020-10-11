@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+    The Milliseconds Converter Application aims to convert the given time in milliseconds into hours, minutes, and seconds. The application is to be coded in Python and deployed as a web application with Flask on AWS Application Load Balancer with Auto Scaling Group of Elastic Compute Cloud (EC2) Instances using AWS Cloudformation Service.
+  
+Parameters:
+  
+ Resources:
+   myec2ServerSecurityGrp:
+     Type: "AWS::EC2::SecurityGroup"
+     Properties:
+       GroupDescription: String #required
+       GroupName: String
+       SecurityGroupEgress:
+         - Egress
+       SecurityGroupIngress:
+         - Ingress
+       Tags:
+         - Tag
+       VpcId: String
+   myALBServerSecurityGrp:
+     Type: "AWS::EC2::SecurityGroup"
+     Properties:
+       GroupDescription: String #required
+       GroupName: String
+       SecurityGroupEgress:
+         - Egress
+       SecurityGroupIngress:
+         - Ingress
+       Tags:
+         - Tag
+       VpcId: String
+   myLT:
+     Type: "AWS::EC2::LaunchTemplate"
+     Properties:
+       LaunchTemplateName: String
+       LaunchTemplateData:
+         LaunchTemplateData
+   launc
+  
+  
+Outputs:

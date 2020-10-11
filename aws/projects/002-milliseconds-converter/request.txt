@@ -1,0 +1,12 @@
+Request Nesnesi
+
+Kullanıcının sunucudan talep ettiği her sayfa istek (request) olarak değerlendirilir. Kullanıcıdan bilgi almaya yönelik bu nesne kullanılmaktadır. Metotları şu şekildedir:
+
+Request.Form
+
+Formlarda "post" metodu kullanılarak gönderilen bilgi, "Request.Form" metodu kullanılarak alınır. Fakat linkler aracılığıyla gönderilen bilgiler, bu metotla alınamaz. Örnek kullanımı şu şekildedir:
+
+Request.Form("formda_kullanılan_nesne");
+
+Auto Scaling Group
+Application Load Balancer
