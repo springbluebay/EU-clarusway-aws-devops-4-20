@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: 2010-09-09
 
 Description: >
   CloudFormation Template for Milliseconds Converter Application. This template creates Application Load Balancer 
-  with Auto Scaling Group of Amazon Linux 2 (ami-026dea5602e368e96) EC2 Instances which host Python Flask Web Application.
+  with Auto Scaling Group of Amazon Linux 2 (ami-0947d2ba12ee1ff75) EC2 Instances which host Python Flask Web Application.
   EC2 instances are placed within WebServerSecurityGroup which allows http (80) connections only from ALBSecurityGroup,
   and Application Load Balancer is placed within ALBSecurityGroup which allows http (80) connections from anywhere.
   WebServerASG Auto Scaling Group is using the WebServerLT Launch Template in order to spin up instances needed, 
@@ -36,9 +36,9 @@ Resources:
     Type: AWS::EC2::LaunchTemplate
     Properties: 
       LaunchTemplateData:
-        ImageId: ami-09d95fab7fff3776c
+        ImageId: ami-0947d2ba12ee1ff75 
         InstanceType: t2.micro
-        KeyName: call.training
+        KeyName: blueman
         SecurityGroupIds: 
           - !GetAtt WebServerSecurityGroup.GroupId
         TagSpecifications: 
@@ -54,10 +54,10 @@ Resources:
               yum install python3 -y
               pip3 install flask
               TOKEN="20ead045838bf426ee4b3dacc1b8670f1635f6a4"
-              FOLDER="https://$TOKEN@https://raw.githubusercontent.com/springbluebay/EU-clarusway-aws-devops-4-20/master/aws/projects/002-milliseconds-converter/"
+              FOLDER="https://$TOKEN@raw.githubusercontent.com/springbluebay/EU-clarusway-aws-devops-4-20/master/aws/projects/002-milliseconds-converter/"
               curl -s --create-dirs -o "/home/ec2-user/templates/index.html" -L "$FOLDER"templates/index.html
               curl -s --create-dirs -o "/home/ec2-user/templates/result.html" -L "$FOLDER"templates/result.html
-              curl -s --create-dirs -o "/home/ec2-user/app.py" -L "$FOLDER"milliseconds-converter-app.py
+              curl -s --create-dirs -o "/home/ec2-user/milliseconds-converter-app.py" -L "$FOLDER"milliseconds-converter-app.py
               python3 /home/ec2-user/milliseconds-converter-app.py
   WebServerTG:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
@@ -74,12 +74,12 @@ Resources:
       SecurityGroups: 
         - !GetAtt ALBSecurityGroup.GroupId
       Subnets:
-        - subnet-c41ba589
-        - subnet-077c9758
-        - subnet-3ccd235a
-        - subnet-ed49bccc
-        - subnet-8d8dbfb3
-        - subnet-3246e63c
+        - subnet-8e7186af
+        - subnet-8017e2df
+        - subnet-e0ad91de
+        - subnet-ddb65ebb
+        - subnet-8e5ee6c3
+        - subnet-478c2e49
       Type: application
   ALBListener:
     Type: AWS::ElasticLoadBalancingV2::Listener

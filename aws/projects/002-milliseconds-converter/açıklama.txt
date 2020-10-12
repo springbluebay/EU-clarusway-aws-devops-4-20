@@ -1,0 +1,16 @@
+ALBSecurityGroup:
+WebServerSecurityGroup#
+ApplicationLoadBalancer#
+WebServerLT*
+WebServerTG*
+WebServerASG
+ALBListener
+
+
+
+curl -s --create-dirs -o "/home/ec2-user/templates/result.html" -L "$FOLDER"templates/result.html
+
+ -s, --silent        Silent mode
+ --create-dirs   Create necessary local directory hierarchy
+ -o, --output <file> Write to file instead of stdout
+  -L, --location      Follow redirects
