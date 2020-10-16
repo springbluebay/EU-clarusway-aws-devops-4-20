@@ -1,0 +1,19 @@
+- Genel değerlendirme
+   * Flipgrid düzenli olarak 6 kişi doldurmakta.
+   * 1 on 1 görüşmeye daha aktif katılım olmalı
+
+- Team Leadler tarafından Sprint-3 değerlendirmesi
+
+- Yeni Team-Lead seçimi
+   * Juliet - E2168-Erdoğan
+   * Kilo - E2317- Mehmet akif
+   * Lima - E2413 Yavuz Selim
+
+- eu-tw-007-student.pdf
+
+- 002-milliseconds-converter projesi template bakılacak
+- cc-006-generate-password
+--------------------------------
+app.py:
+endpoint kısmı önemli
+elb her ec2 açtığında deccouple edip db yeni start edilen ec2 ya bağlamak lazım
