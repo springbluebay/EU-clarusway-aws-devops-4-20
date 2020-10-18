@@ -4,5 +4,5 @@ import boto3
 s3 = boto3.resource('s3')
 
 # Upload a new file
-data = open('test.jpg', 'rb')
-s3.Bucket('guiles').put_object(Key='test.jpg', Body=data)
+data = open('ryu.jpg', 'rb')
+s3.Bucket('spring.broadcast').put_object(Key='ryu.jpg', Body=data)
