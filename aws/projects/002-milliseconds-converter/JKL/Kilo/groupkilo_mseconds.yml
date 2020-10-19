@@ -1,0 +1,127 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  This template deploys an t2.micro EC2 Linux instance, running an application named miliseconds convertor that converts the given time in miliseconds 
+  into hours, miutes, and seconds. The application is coded in Python and deployed as a web application with Flask on AWS Application Load Balancer with Auto Scaling Group
+  of Amazon Linux 2 Elastic Compute Cloud(EC2) within default VPC. For deploying EC2, keypair is defined as a parameter.
+Parameters:
+  Subnets:
+    Type: List<AWS::EC2::Subnet::Id>
+    Description: The list of SubnetIds in your Virtual Private Cloud (VPC)
+  KeyName:
+    Description: The EC2 Key Pair to allow SSH access to the instances
+    Type: AWS::EC2::KeyPair::KeyName
+  
+Resources:
+  MSPAutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AvailabilityZones: !GetAZs
+      DesiredCapacity: 2 
+      LaunchConfigurationName: !Ref MSPLaunchConfig
+      HealthCheckType: ELB
+      HealthCheckGracePeriod: 90
+      MinSize: '1'
+      MaxSize: '3'
+      TargetGroupARNs:
+        - !Ref MSPALBTargetGroup
+      Tags:
+        - Key: Name
+          PropagateAtLaunch: true
+          Value: !Sub Web Server of ${AWS::StackName} Stack 
+  
+  MSPLaunchConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      KeyName: !Ref KeyName
+      ImageId: ami-0c94855ba95c71c99
+      InstanceType: t2.micro
+      SecurityGroups:
+        - !Ref MSPInstanceSecurityGroup
+      UserData: !Base64 |
+        #!/bin/bash
+        yum update -y
+        yum install python3 -y
+        pip3 install flask
+        mkdir milliseconds
+        cd milliseconds
+        wget https://raw.githubusercontent.com/E2058/aws_workshops/master/aws/projects/002-milliseconds-converter/msapp.py
+        mkdir templates
+        cd templates
+        wget https://raw.githubusercontent.com/E2058/aws_workshops/master/aws/projects/002-milliseconds-converter/templates/index.html
+        wget https://raw.githubusercontent.com/E2058/aws_workshops/master/aws/projects/002-milliseconds-converter/templates/result.html
+        cd ..
+        python3 groupkilo_msapp.py
+  
+  MSPCPUPolicy:
+    Type: "AWS::AutoScaling::ScalingPolicy"
+    Properties:
+      AutoScalingGroupName: !Ref MSPAutoScalingGroup
+      PolicyType: TargetTrackingScaling
+      TargetTrackingConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ASGAverageCPUUtilization
+        TargetValue: 60
+  
+  MSPApplicationLoadBalancer:
+    Type: "AWS::ElasticLoadBalancingV2::LoadBalancer"
+    Properties:
+      SecurityGroups:
+        - !GetAtt MSPLoadBalancerSecurityGroup.GroupId
+      Subnets: !Ref Subnets 
+
+  MSPALBListener:
+    Type: "AWS::ElasticLoadBalancingV2::Listener"
+    Properties:
+      DefaultActions: 
+        - Type: forward
+          TargetGroupArn: !Ref MSPALBTargetGroup
+      LoadBalancerArn: !Ref MSPApplicationLoadBalancer
+      Port: 80
+      Protocol: HTTP
+    
+  MSPALBTargetGroup:
+    Type: "AWS::ElasticLoadBalancingV2::TargetGroup"
+    Properties:
+      HealthCheckIntervalSeconds: 25
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 3
+      Port: 80
+      Protocol: HTTP
+      UnhealthyThresholdCount: 3
+      VpcId: !GetAtt MSPLoadBalancerSecurityGroup.VpcId
+  
+  MSPLoadBalancerSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: Enables HTTP
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+          
+  MSPInstanceSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: Enables SSH and HTTP
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          SourceSecurityGroupId: !GetAtt MSPLoadBalancerSecurityGroup.GroupId
+          
+          #!GetAtt 
+          #  - !GetAtt MSPLoadBalancerSecurityGroup.VpcId
+          #    CidrBlock 
+  
+Outputs:
+  URL:
+    Description: The URL of the website
+    Value: !Join 
+      - ''
+      - - 'http://'
+        - !GetAtt MSPApplicationLoadBalancer.DNSName

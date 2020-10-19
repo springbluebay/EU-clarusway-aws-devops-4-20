@@ -8,5 +8,3 @@ Formlarda "post" metodu kullanılarak gönderilen bilgi, "Request.Form" metodu k
 
 Request.Form("formda_kullanılan_nesne");
 
-Auto Scaling Group
-Application Load Balancer
