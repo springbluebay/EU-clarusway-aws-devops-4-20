@@ -69,7 +69,7 @@ Resources:
               - MyDBURI: !GetAtt MyDatabaseServer.Endpoint.Address
   WebServerTG:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    Properties: 
+    Properties:
       Port: 80
       Protocol: HTTP
       TargetType: instance
