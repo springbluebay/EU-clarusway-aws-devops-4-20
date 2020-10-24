@@ -1,0 +1,116 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  
+Parameters:
+  DomainName:
+    Description: DNS name of an existing Route 53 Hosted Zone ex. clarusway.us
+    Type: AWS::Route53::HostedZone::Id
+
+  KittensDomainName:
+    Description: Sub domain name for project ex.. kittens.clarusway.us
+    Type: String
+    AllowedPattern: (?!-)[a-zA-Z0-9-.]{1,63}(?<!-)
+    ConstraintDescription: Must be a valid DNS Zone name
+
+
+Resources:
+  MyCertificateManager:
+    Type: "AWS::CertificateManager::Certificate"
+    Properties:
+      DomainName: metinkalkan.com. #required
+      DomainValidationOptions:
+        - HostedZoneId: "Z02365623T2QZT03MZ1TS"
+          ValidationDomain: metinkalkan.com.
+
+  MyCloudFront:
+    Type: "AWS::CloudFront::Distribution"
+    Properties:
+      DistributionConfig: #required
+        Aliases:
+          - String
+        CacheBehaviors: 
+          - CacheBehavior
+        Comment: String
+        CustomErrorResponses: 
+          - CustomErrorResponse
+        DefaultCacheBehavior: 
+          DefaultCacheBehavior
+        DefaultRootObject: String
+        Enabled: Boolean
+        HttpVersion: String
+        IPV6Enabled: Boolean
+        Logging: 
+          Logging
+        OriginGroups: 
+          OriginGroups
+        Origins: 
+          - Origin
+        PriceClass: String
+        Restrictions: 
+          Restrictions
+        ViewerCertificate: 
+          ViewerCertificate
+        WebACLId: String
+            Tags:
+              - Tag
+
+  MyRoute53RecordSet:
+    Type: "AWS::Route53::RecordSet"
+    Properties:
+      AliasTarget:
+        AliasTarget
+      Comment: String
+      Failover: String
+      GeoLocation:
+        GeoLocation
+      HealthCheckId: String
+      HostedZoneId: String
+      HostedZoneName: String
+      MultiValueAnswer: Boolean
+      Name: String #required
+      Region: String
+      ResourceRecords:
+        - String
+      SetIdentifier: String
+      TTL: String
+      Type: String #required
+      Weight: Integer
+
+  MyS3Bucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      AccelerateConfiguration:
+        AccelerateConfiguration
+      AccessControl: String
+      AnalyticsConfigurations:
+        - AnalyticsConfiguration
+      BucketEncryption:
+        BucketEncryption
+      BucketName: String
+      CorsConfiguration:
+        CorsConfiguration
+      InventoryConfigurations:
+        - InventoryConfiguration
+      LifecycleConfiguration:
+        LifecycleConfiguration
+      LoggingConfiguration:
+        LoggingConfiguration
+      MetricsConfigurations:
+        - MetricsConfiguration
+      NotificationConfiguration:
+        NotificationConfiguration
+      ObjectLockConfiguration:
+        ObjectLockConfiguration
+      ObjectLockEnabled: Boolean
+      PublicAccessBlockConfiguration:
+        PublicAccessBlockConfiguration
+      ReplicationConfiguration:
+        ReplicationConfiguration
+      Tags:
+        - Tag
+      VersioningConfiguration:
+        VersioningConfiguration
+      WebsiteConfiguration:
+        WebsiteConfiguration
+  
+Outputs:
