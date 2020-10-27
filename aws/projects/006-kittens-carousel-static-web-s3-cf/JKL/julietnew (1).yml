@@ -1,0 +1,107 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  
+Parameters:
+  DomainRoot:
+    Description: "Root domain name for the Route53 records. 
+    Must not be FQDN such as \"example.com\""
+    Type: String
+
+  FullDomain:
+    Description: "Domain name for your website (www.example.com)"
+    Type: String
+
+  AcmCertificateArn:
+    Type: String
+    Description: the Amazon Resource Name (ARN) of an AWS Certificate Manager (ACM) certificate.
+    AllowedPattern: "arn:aws:acm:.*"    
+  
+Resources:
+  myS3Bucket:
+    Type: "AWS::S3::Bucket"
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: !Ref FullDomain
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: False
+        BlockPublicPolicy: False
+        IgnorePublicAcls: False
+        RestrictPublicBuckets: False
+      VersioningConfiguration:
+        Status: Enabled
+      WebsiteConfiguration:
+        IndexDocument: index.html
+      AccessControl: PublicRead  
+  
+  myBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref myS3Bucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: '*'
+            Action:
+              - s3:GetObject
+            Resource: !Join
+              - ""
+              - - !GetAtt myS3Bucket.Arn
+                - "/*"
+
+  myCloudFrontDistribution:
+    Type: "AWS::CloudFront::Distribution"
+    Properties:
+      DistributionConfig: #required
+        Aliases: 
+          - !Ref FullDomain
+        DefaultCacheBehavior: 
+          AllowedMethods: 
+            - GET 
+            - HEAD 
+          ForwardedValues: 
+            Cookies: 
+              Forward: none 
+            QueryString: true 
+          TargetOriginId: Bucket
+          ViewerProtocolPolicy: redirect-to-https
+        DefaultRootObject: index.html
+        Enabled: true 
+        HttpVersion: http2
+        IPV6Enabled: true 
+        Origins:
+          - Id: Bucket
+            DomainName: !GetAtt myS3Bucket.DomainName
+            CustomOriginConfig:
+                HTTPPort: 80
+                HTTPSPort: 443
+                OriginProtocolPolicy: http-only
+        PriceClass: PriceClass_100 
+        ViewerCertificate: 
+            AcmCertificateArn: !Ref AcmCertificateArn
+            MinimumProtocolVersion: TLSv1.2_2019
+            SslSupportMethod: sni-only
+  
+  myRoute53RecordSetGroup:
+    Type: "AWS::Route53::RecordSetGroup"
+    Properties:
+      HostedZoneName: !Join ['', [!Ref 'DomainRoot', .]]
+      RecordSets:
+        - AliasTarget: 
+            DNSName: !GetAtt myCloudFrontDistribution.DomainName
+            HostedZoneId: Z2FDTNDATAQYW2
+          Name: !Ref FullDomain
+          Type: A
+    
+Outputs:
+  myS3Bucket:
+    Description: ARN of S3 bucket hosting the website
+    Value: !GetAtt myS3Bucket.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}myS3Bucket'
+  CloudFrontDomainName:
+    Description: Endpoint for Kittens Cloudfront Distribution
+    Value: !GetAtt 'myCloudFrontDistribution.DomainName'
+  FullDomainNames:
+    Description: Full DomainName of Kittens Carousel Application
+    Value:       !Ref 'FullDomain'
