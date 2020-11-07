@@ -1,0 +1,26 @@
+"manager token"
+docker swarm join --token SWMTKN-1-4n2luc9gixwfwz4z6thnzjnjsosi1inof4kabev3ne94sveu7l-81ssvd8krwyj7lf6s8vgxvbjq 172.31.54.224:2377
+
+"worker token"
+docker swarm join --token SWMTKN-1-4n2luc9gixwfwz4z6thnzjnjsosi1inof4kabev3ne94sveu7l-cwo1us79xujoppjrm5yv5rvb6 172.31.54.224:2377
+
+
+Private-IP                 Public-IP
+172.31.91.72   manager-1  ec2-52-87-248-114.compute-1.amazonaws.com
+172.31.91.209  manager-2  ec2-34-238-239-226.compute-1.amazonaws.com
+172.31.16.22   manager-3  ec2-3-85-108-229.compute-1.amazonaws.com
+172.31.86.3    worker-1   ec2-18-233-9-205.compute-1.amazonaws.com
+172.31.82.152  worker-2   ec2-3-82-198-99.compute-1.amazonaws.com
+
+
+leader node public dns:8080 gir
+
+ ssh -i "blueman.pem" ec2-user@ec2-3-82-198-99.compute-1.amazonaws.com
+sudo hostnamectl set-hostname worker-2
+docker swarm join-token worker
+
+
+E2334 Emre  5:25 PM
+2377 ve 8080 portlarinin adi neydi
+
+
