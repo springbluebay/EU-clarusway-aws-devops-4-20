@@ -89,7 +89,7 @@ Resources:
           yum update -y
           hostnamectl set-hostname jenkins-server
           yum install git -y
-          yum install java-11-amazon-corretto -y
+          amazon-linux-extras install java-openjdk11 -y
           wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat/jenkins.repo
           rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key
           yum install jenkins -y
@@ -108,8 +108,6 @@ Resources:
           curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" \
           -o /usr/local/bin/docker-compose
           chmod +x /usr/local/bin/docker-compose
-          # uninstall aws cli version 1
-          rm -rf /bin/aws
           curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
           unzip awscliv2.zip
           ./aws/install

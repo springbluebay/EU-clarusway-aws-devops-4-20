@@ -1,4 +1,4 @@
-# Project-204: Jenkins Pipeline for Dockerized Phonebook Application (Python Flask & MySQL) Deployed on Docker Swarm
+# Project-202: Jenkins Pipeline for Dockerized Phonebook Application (Python Flask & MySQL) Deployed on Docker Swarm
 
 ## Description
 
@@ -6,7 +6,7 @@ This project aims to create a Jenkins pipeline to deploy the Phonebook Applicati
 
 ## Problem Statement
 
-![Project_204](Project_204.png)
+![Project_202](Project_202.png)
 
 - Your company has recently started a project that aims to serve as phonebook web application. Your teammates have started to work on the project and developed the UI and backend part of the project and they need your help to deploy the app in development environment.
 
@@ -105,7 +105,7 @@ This project aims to create a Jenkins pipeline to deploy the Phonebook Applicati
 ## Project Skeleton
 
 ```text
-204-jenkins-pipeline-for-phonebook-app-on-docker-swarm (folder)
+202-jenkins-pipeline-for-phonebook-app-on-docker-swarm (folder)
 |
 |----readme.md                  # Given to the students (Definition of the project)
 |----phonebook-cfn-template.yml # To be delivered by students (Cloudformation template)
