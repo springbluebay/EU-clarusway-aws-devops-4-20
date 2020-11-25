@@ -25,7 +25,7 @@ Resources:
               - ec2-instance-connect:SendSSHPublicKey
             Resource:
               - !Sub arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:instance/*
-            Condition: {"StringEquals": {"aws:ResourceTag/project":"204"}}
+            Condition: {"StringEquals": {"aws:ResourceTag/project":"202"}}
           - Effect: Allow
             Action:
               - ec2:DescribeInstances
@@ -170,7 +170,7 @@ Resources:
         - Key: server
           Value: docker-grand-master
         - Key: project
-          Value: "204"
+          Value: "202"
       UserData: 
         Fn::Base64: |
           #! /bin/bash
@@ -214,7 +214,7 @@ Resources:
         - Key: Name
           Value: !Sub Docker Manager 2nd of ${AWS::StackName}
         - Key: project
-          Value: "204"
+          Value: "202"
   DockerManager3:
     Type: AWS::EC2::Instance
     DependsOn:
@@ -229,7 +229,7 @@ Resources:
         - Key: Name
           Value: !Sub Docker Manager 3rd of ${AWS::StackName}
         - Key: project
-          Value: "204"
+          Value: "202"
   DockerWorker1:
     Type: AWS::EC2::Instance
     DependsOn:
@@ -244,7 +244,7 @@ Resources:
         - Key: Name
           Value: !Sub Docker Worker 1st of ${AWS::StackName}
         - Key: project
-          Value: "204"
+          Value: "202"
   DockerWorker2:
     Type: AWS::EC2::Instance
     DependsOn:
@@ -259,7 +259,7 @@ Resources:
         - Key: Name
           Value: !Sub Docker Worker 2nd of ${AWS::StackName}
         - Key: project
-          Value: "204" 
+          Value: "202" 
 Outputs:
   1stDockerManagerDashboard:
     Description: Dashboard for Docker Swarm
@@ -291,5 +291,3 @@ Outputs:
     Value: !Sub 
       - ${PublicAddress}
       - PublicAddress: !GetAtt DockerWorker2.PublicDnsName
-  
-  

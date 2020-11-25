@@ -12,3 +12,20 @@ Project-202: Docker Swarm Deployment of Phonebook Application (Python Flask) wit
 - Application Deployement
     - Dockerfile
     - docker-compose.yml (Web server and Mysql)
+
+
+    docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-connect-set-up.html
+
+    anahtar-kilit ilişkisi gibi
+11:02
+asimetrik şifreleme=private+public key
+11:03
+ssh-keygen
+
+
+ssh-keygen -t rsa :: kendimiz localde manuel olarak private key oluşturuyoruz...
+
+
+https://github.com/awslabs/amazon-ecr-credential-helper/blob/master/docs/docker-credential-ecr-login.1
+
+
