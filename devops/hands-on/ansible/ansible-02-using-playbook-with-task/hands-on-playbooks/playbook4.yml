@@ -11,7 +11,7 @@
      shell: "service httpd start"
 
 - name: Apache installation for ubuntuservers
-  hosts: ubuntuserver
+  hosts: ubuntuservers
   tasks:
    - name: install the latest version of Apache
      apt:

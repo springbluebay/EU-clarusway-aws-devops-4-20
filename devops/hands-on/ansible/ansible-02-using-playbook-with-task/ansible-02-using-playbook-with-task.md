@@ -71,7 +71,8 @@ $ scp -i <pem file> <pem file> ec2-user@<public DNS name of the control node>:/h
 
 - or you can create a file name <pem file> into the directory /etc/ansible on the control node and copy your pem file into it.
 
-scp -i blueman.pem -r /c/Users/gklkn/Desktop/spring-git/europe-clarusway-aws-devops-4-20/devops/hands-on/ansible/ansible-02-using-playbook-with-task ec2-3-92-48-74.compute-1.amazonaws.com:/home/ec2-user/etc/ansible
+scp -i blueman.pem blueman.pem ec2-user@3.95.233.214:/home/ec2-user
+
 
 ## Part 2 - Ansible Playbooks
 
@@ -170,12 +171,12 @@ ansible node1 -a "cat testfile3"
 
 - Install Apache server with "playbook4.yml". After the installation, check if the Apache server is reachable from the browser.
 
-```bash
 $ ansible-doc yum
 $ ansible-doc apt
 
 $ vim playbook4.yml
 
+```bash
 ---
 - name: Apache installation for webservers
   hosts: webservers
@@ -218,7 +219,7 @@ $ vim playbook5.yml
        state: absent
 
 - name: Remove Apache from ubuntuservers
-  hosts: ubuntuserver
+  hosts: ubuntuservers
   tasks:
    - name: Remove Apache
      apt:
