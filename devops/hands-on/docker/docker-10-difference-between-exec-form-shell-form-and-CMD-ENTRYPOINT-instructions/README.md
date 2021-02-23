@@ -53,7 +53,7 @@ docker build -t cmd-shell:v1 .
 - Run cmd-shell image.
 
 ```bash
-docker run cmd-shell
+docker run cmd-shell:v1
 hello
 ```
 
@@ -68,13 +68,13 @@ CMD ["echo", "hello"]
 - Build an image from this Dockerfile and tag it as "cmd-exec:v1".
 
 ```bash
-docker build -t cmd-exec .
+docker build -t cmd-exec:v1 .
 ```
 
 - Run cmd-exec image.
 
 ```bash
-docker run cmd-exec
+docker run cmd-exec:v1
 hello
 ```
 
@@ -99,7 +99,7 @@ docker build -t cmd-shell:v2 .
 - Run cmd-shell:v2 image.
 
 ```bash
-docker run cmd-shell
+docker run cmd-shell:v2
 /root
 ```
 
